@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clustering Analysis</title>
+</head>
+<body>
+    <h1>Clustering Analysis</h1>
+    <form method="post" action="{{ url_for('blueprint.clustering_analysis') }}">
+        <label for="selected_populations">Select populations for clustering analysis:</label><br>
+        <select id="selected_populations" name="selected_populations" multiple>
+            <option value="SIB">Siberian Ancestry</option>
+            <option value="EUR">European Ancestry</option>
+            <option value="EAS">East Asian Ancestry</option>
+            <option value="AMR">American Ancestry</option>
+            <option value="SAS">South Asian Ancestry</option>
+            <option value="AFR">African Ancestry</option>
+        </select><br><br>
+        <button type="submit">Perform Clustering Analysis</button>
+    </form>
+</body>
+</html>

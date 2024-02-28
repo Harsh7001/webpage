@@ -3,92 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample Population</title>
+    <title>Home</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+            text-align: center;
         }
 
-        h1, h2 {
-            text-align: center;
+        h1 {
             color: #333;
+            margin-bottom: 40px;
         }
 
-        form {
-            text-align: center;
-            margin-bottom: 20px;
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
         }
 
-        select {
-            padding: 8px;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-
-        input[type="submit"] {
-            padding: 8px 20px;
-            font-size: 16px;
+        .button {
+            padding: 15px 30px;
+            font-size: 18px;
             border-radius: 5px;
             background-color: #007bff;
             color: #fff;
             border: none;
+            margin: 0 20px;
             cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
         }
 
-        table {
-            width: 80%;
-            margin: 0 auto;
-            border-collapse: collapse;
+        .button:hover {
+            background-color: #0056b3;
         }
 
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #ddd;
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <h1>Select Population:</h1>
-    <form method="POST">
-        <select name="population">
-            {% for population in populations %}
-                <option value="{{ population }}">{{ population }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Show Population">
-    </form>
-
-    <h2>Population Data:</h2>
-    <table>
-        <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
-            <!-- Add more headers as needed -->
-        </tr>
-        {% for row in rows %}
-            <tr>
-                <td>{{ row[0] }}</td>
-                <td>{{ row[1] }}</td>
-                <!-- Add more columns as needed -->
-            </tr>
-        {% endfor %}
-    </table>
+    <h1>Welcome to our <br> Genetic Analysis App - by Gentoo</h1>
+    <div class="button-container">
+        <a href="/clustering_analysis" class="button">Clustering Analysis</a>
+        <a href="/admixture_analysis" class="button">Admixture Analysis</a>
+        <a href="/genetic_information" class="button">Genetic Information</a>
+        <a href="/about" class="button">About</a>
+    </div>
+    <div class="footer">
+        <p>Visit our <a href="https://github.com/Harsh7001/webpage" target="_blank" rel="noopener noreferrer">GitHub repository</a> for more information.</p>
+    </div>
 </body>
 </html>

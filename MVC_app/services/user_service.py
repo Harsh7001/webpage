@@ -1,4 +1,6 @@
 import json
+
+from flask import request
 #from models.machine import SamplePop,Populations,GeneticData,SNP,ClusteringAnalysis,Admixture, db
 
 
@@ -46,17 +48,27 @@ matplotlib.use('agg')  # Use non-interactive backend
 import matplotlib.pyplot as plt
 def perform_clustering_analysis(selected_populations):
     # Connect to the database
-    conn = sqlite3.connect('population_data.db')
-    cursor = conn.cursor()
-
-    # Retrieve PCA results from the database
-    
-    cursor.execute('SELECT pc.SampleID, pc.PCA_1, pc.PCA_2, sp.population, sp.superpopulation_code FROM pca_table as pc JOIN sample_pop as sp ON pc.SampleId = sp.id WHERE sp.population_code IN (selected_populations)')
+    if 'EUR' in selected_populations or 'AMR' in selected_populations or 'SAS' in selected_populations or 'EAS' in selected_populations or 'AFR' in selected_populations or 'SIB' in selected_populations :       
+    # Code for EUR population
+        conn = sqlite3.connect('population_data.db')
+        cursor = conn.cursor()
+        print("PRINTINGGGGGG---->",selected_populations)
+        print("INSIDE IF")
+        sql_query = "SELECT pc.SampleID, pc.PCA_1, pc.PCA_2, sp.population FROM pca_table as pc JOIN sample_pop as sp ON pc.SampleId = sp.Id WHERE sp.population IN (SELECT population_code FROM populations WHERE superpopulation_code IN ({}))".format(','.join('?' for _ in selected_populations))
+        cursor.execute(sql_query, selected_populations)
+    else:
+        conn = sqlite3.connect('population_data.db')
+        cursor = conn.cursor()
+        print("PRINTINGGGGGG---->",selected_populations)
+        print("INSIDE ELSE")
+        # Retrieve PCA results from the database
+        sql_query= "SELECT pc.SampleID, pc.PCA_1, pc.PCA_2, sp.population FROM pca_table as pc JOIN sample_pop as sp ON pc.SampleId = sp.Id WHERE sp.population IN ({})".format(','.join('?' for _ in selected_populations))
+        cursor.execute(sql_query, selected_populations)
     results = cursor.fetchall()     
 
     # Close the database connection
     conn.close()
-
+    print("RESULTS---->",results)
     # Extract PC1, PC2, and SampleID values
     sample_ids = [result[0] for result in results]
     pc1_values = [result[1] for result in results]
@@ -68,7 +80,6 @@ def perform_clustering_analysis(selected_populations):
     plt.xlabel('Principal Component 1')
     plt.ylabel('Principal Component 2')
     plt.title('PCA Plot')
-    plt.grid(True)
 
     # Annotate sample IDs on the plot
     for i, sample_id in enumerate(sample_ids):
@@ -87,3 +98,58 @@ def perform_clustering_analysis(selected_populations):
     clustering_results = "Clustering results for selected populations: {}".format(selected_populations)
     
     return clustering_results, plot_filepath
+
+# Implement the admixture analysis function
+
+def perform_admixture_analysis(selected_populations):
+    print("Selected populations:", selected_populations)
+
+# Import necessary libraries
+    # Connect to the database
+    conn = sqlite3.connect('population_data.db')
+    cursor = conn.cursor()
+
+    # Retrieve PCA results from the database
+    
+    cursor.execute("SELECT ad.id, ad.P1, ad.P2, sp.population FROM admixture as ad JOIN sample_pop as sp ON ad.id = sp.Id WHERE sp.population IN ('SIB')")
+
+    results = cursor.fetchall()     
+
+    # Close the database connection
+    conn.close()
+
+    # Extract PC1, PC2, and SampleID values
+    sample_ids = [result[0] for result in results]
+    p1_values = [result[1] for result in results]
+    p2_values = [result[2] for result in results]
+
+    # Create scatter plot
+    plt.figure(figsize=(8, 6))
+    plt.scatter(p1_values, p2_values, c='steelblue', alpha=0.5)
+    plt.xlabel('Principal Component 1')
+    plt.ylabel('Principal Component 2')
+    plt.title('Admixture Plot')
+    plt.grid(True)
+
+    # Annotate sample IDs on the plot
+    for i, sample_id in enumerate(sample_ids):
+        plt.annotate(sample_id, (p1_values[i], p2_values[i]))
+
+    # Save the plot as an image file
+    adplot_filepath = '/Users/aditisahu/Documents/webpage/MVC_app/static/Admixture_plot.png'
+    plt.savefig(adplot_filepath)
+
+    # Clear the plot
+    plt.clf()
+
+    # Implement clustering analysis logic here based on the selected populations
+    # This function should return the clustering results
+    # Example: clustering_results = clustering_algorithm(selected_populations)
+    admixture_results = "Admixture results for selected populations: {}".format(selected_populations)
+    
+    return admixture_results, adplot_filepath
+
+def process_genetic_info():
+    return "Genetic information processed successfully."
+        # Here you can perform further processing of the data,
+        # such as database operations or analysis.

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genetic Information Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        .matrix-container {
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 30px;
+        }
+
+        .matrix {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .matrix img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px;
+        }
+
+        .download-button {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Genetic Information Results</h1>
+
+    <!-- Placeholder for displaying allele and genotype frequencies -->
+    <div id="frequencies">
+        <!-- Frequency data will be displayed here -->
+    </div>
+
+    <!-- Placeholder for displaying clinical relevance info -->
+    <div id="clinical_relevance">
+        <!-- Clinical relevance info will be displayed here -->
+    </div>
+
+    <!-- Placeholder for displaying pairwise matrix -->
+    <div class="matrix-container">
+        <h2>Pairwise Population Genetic Differentiation Matrix</h2>
+        <div class="matrix">
+            <!-- Pairwise matrix plot will be displayed here -->
+            <img src="{{ url_for('static', filename='pairwise_matrix.png') }}" alt="Pairwise Matrix">
+        </div>
+    </div>
+
+    <!-- Download button for results text file -->
+    <div class="download-button">
+        <a href="{{ url_for('blueprint.download_results') }}" download="results.txt">
+            <button>Download Results</button>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrieve SNP Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-top: 30px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Retrieve SNP Information</h1>
+
+    <form method="post" action="/retrieve_snp_info">
+        <label for="selection_type">Select Search Criteria:</label><br>
+        <select id="selection_type" name="selection_type">
+            <option value="snp_id">SNP ID</option>
+            <option value="genomic_coordinates">Genomic Coordinates</option>
+            <option value="gene_names">Gene Names</option>
+        </select><br>
+
+        <div id="snp_id_input" style="display: none;">
+            <label for="snp_id">SNP ID:</label><br>
+            <input type="text" id="snp_id" name="snp_id"><br>
+        </div>
+
+        <div id="genomic_coordinates_input" style="display: none;">
+            <label for="chromosome">Chromosome:</label><br>
+            <input type="text" id="chromosome" name="chromosome"><br>
+
+            <label for="start_position">Start Position:</label><br>
+            <input type="text" id="start_position" name="start_position"><br>
+
+            <label for="end_position">End Position:</label><br>
+            <input type="text" id="end_position" name="end_position"><br>
+        </div>
+
+        <div id="gene_names_input" style="display: none;">
+            <label for="gene_names">Gene Names:</label><br>
+            <input type="text" id="gene_names" name="gene_names"><br>
+        </div>
+
+        <input type="submit" value="Retrieve Information">
+    </form>
+
+    <script>
+        // Show input fields based on selection type
+        document.getElementById("selection_type").addEventListener("change", function() {
+            var selectionType = this.value;
+            var snpIdInput = document.getElementById("snp_id_input");
+            var genomicCoordinatesInput = document.getElementById("genomic_coordinates_input");
+            var geneNamesInput = document.getElementById("gene_names_input");
+
+            if (selectionType === "snp_id") {
+                snpIdInput.style.display = "block";
+                genomicCoordinatesInput.style.display = "none";
+                geneNamesInput.style.display = "none";
+            } else if (selectionType === "genomic_coordinates") {
+                snpIdInput.style.display = "none";
+                genomicCoordinatesInput.style.display = "block";
+                geneNamesInput.style.display = "none";
+            } else if (selectionType === "gene_names") {
+                snpIdInput.style.display = "none";
+                genomicCoordinatesInput.style.display = "none";
+                geneNamesInput.style.display = "block";
+            }
+        });
+    </script>
+</body>
+</html>

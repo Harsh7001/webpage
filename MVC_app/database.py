@@ -2,7 +2,7 @@ import sqlite3
 import csv
 
 # Connect to the SQLite database
-conn = sqlite3.connect('your_database.db')
+conn = sqlite3.connect('population_data.db')
 cursor = conn.cursor()
 
 # Create sample_id_table if it doesn't exist

@@ -8,12 +8,12 @@
 <body>
     <h1>Admixture Analysis</h1>
     <form method="post" action="{{ url_for('blueprint.admixture_analysis') }}">
-        <label for="selected_populations">Select groups for admixture analysis:</label><br>
+        <label for="ad_selected_populations">Select groups for admixture analysis:</label><br>
         <input type="radio" id="populations" name="group_type" value="populations" checked>
         <label for="populations">Populations</label>
         <input type="radio" id="superpopulations" name="group_type" value="superpopulations">
         <label for="superpopulations">Superpopulations</label><br><br>
-        <select id="selected_populations" name="selected_populations" multiple>
+        <select id="ad_selected_populations" name="ad_selected_populations" multiple>
             <!-- Options will be dynamically populated based on the button selected -->
         </select><br><br>
         <button type="submit">Perform Admixture Analysis</button>
@@ -21,39 +21,35 @@
 
     <script>
         const populations = {
-            'SIB': 'Siberian Ancestry',
-            'EUR': 'European Ancestry',
-            'EAS': 'East Asian Ancestry',
-            'AMR': 'American Ancestry',
-            'SAS': 'South Asian Ancestry',
-            'AFR': 'African Ancestry',
-            'ACB': 'African Caribbean in Barbados',
-            'ASW': 'Americans of African Ancestry in SW USA',
-            'BEB': 'Bengali in Bangladesh',
-            'CDX': 'Chinese Dai in Xishuangbanna, China',
-            'CHB': 'Han Chinese in Bejing, China',
+            'SIB': 'Siberia',
+            'PJL': 'Punjabi',
+            'BEB': 'Bengali',
+            'STU': 'Tamil',
+            'ITU': 'Telugu',
+            'GIH': 'Gujarati',
+            'GBR': 'British',
+            'FIN': 'Finland',
+            'IBS': 'Iberian',
+            'TSI': 'Toscani',
             'CHS': 'Southern Han Chinese',
-            'CLM': 'Colombians from Medellin, Colombia',
-            'ESN': 'Esan in Nigeria',
-            'FIN': 'Finnish in Finland',
-            'GBR': 'British in England and Scotland',
-            'GIH': 'Gujarati Indian in Houston, TX',
-            'GWD': 'Gambian in Western Division',
-            'IBS': 'Iberian Population in Spain',
-            'ITU': 'Indian Telugu in the UK',
-            'JPT': 'Japanese in Tokyo, Japan',
-            'KHV': 'Kinh in Ho Chi Minh City, Vietnam',
-            'LWK': 'Luhya in Webuye, Kenya',
-            'MSL': 'Mende in Sierra Leone',
-            'MXL': 'Mexican Ancestry in Los Angeles, CA',
-            'PEL': 'Peruvian in Lima, Peru',
-            'PJL': 'Punjabi in Lahore, Pakistan',
-            'PUR': 'Puerto Rican in Puerto Rico',
-            'STU': 'Sri Lankan Tamil in the UK',
-            'TSI': 'Toscani in Italia',
-            'YRI': 'Yoruba in Ibadan, Nigeria'
+            'CDX': 'Dai Chinese',
+            'KHV': 'Kinh Vietnamese',
+            'CHB': 'Han Chinese',
+            'JPT': 'Japanese',
+            'PUR': 'Puerto Rican',
+            'CLM': 'Colombian',
+            'PEL': 'Peruvian',
+            'MXL': 'Mexican Ancestry',
+            'ACB': 'African Caribbean',
+            'GWD': 'Gambian Mandinka',
+            'ESN': 'Esan',
+            'MSL': 'Mende',
+            'YRI': 'Yoruba',
+            'LWK': 'Luhya',
+            'ASW': 'African Ancestry SW'
         };
         const superpopulations = {
+            'SIB': 'Siberian',
             'EUR': 'European',
             'EAS': 'East Asian',
             'AMR': 'American',
@@ -63,7 +59,7 @@
 
 
         function populateDropdown(selectedValue) {
-            const selectElement = document.getElementById('selected_populations');
+            const selectElement = document.getElementById('ad_selected_populations');
             selectElement.innerHTML = '';
             const groups = selectedValue === 'populations' ? populations : superpopulations;
             for (const code in groups) {

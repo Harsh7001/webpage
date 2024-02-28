@@ -101,17 +101,26 @@ def perform_clustering_analysis(selected_populations):
 
 # Implement the admixture analysis function
 
-def perform_admixture_analysis(selected_populations):
-    print("Selected populations:", selected_populations)
-
+def perform_admixture_analysis(ad_selected_populations):
+    print("Selected populations:", ad_selected_populations)
+    if 'EUR' in ad_selected_populations or 'AMR' in ad_selected_populations or 'SAS' in ad_selected_populations or 'EAS' in ad_selected_populations or 'AFR' in ad_selected_populations or 'SIB' in ad_selected_populations :       
+    # Code for EUR population
+        conn = sqlite3.connect('population_data.db')
+        cursor = conn.cursor()
+        print("PRINTINGGGGGG---->",ad_selected_populations)
+        print("INSIDE IF")
+        sql_query = "SELECT ad.id, ad.P1, ad.P2, sp.population FROM admixture as ad JOIN sample_pop as sp ON ad.id = sp.Id WHERE sp.population IN (SELECT population_code FROM populations WHERE superpopulation_code IN ({}))".format(','.join('?' for _ in ad_selected_populations))
+        cursor.execute(sql_query, ad_selected_populations)
 # Import necessary libraries
+    else:
+        conn = sqlite3.connect('population_data.db')
+        cursor = conn.cursor()
+        print("PRINTINGGGGGG---->",ad_selected_populations)
+        print("INSIDE ELSE")
+        # Retrieve PCA results from the database
+        sql_query= "SELECT ad.id, ad.P1, ad.P2, sp.population FROM admixture as ad JOIN sample_pop as sp ON ad.id = sp.Id WHERE sp.population IN ({})".format(','.join('?' for _ in ad_selected_populations))
+        cursor.execute(sql_query, ad_selected_populations)
     # Connect to the database
-    conn = sqlite3.connect('population_data.db')
-    cursor = conn.cursor()
-
-    # Retrieve PCA results from the database
-    
-    cursor.execute("SELECT ad.id, ad.P1, ad.P2, sp.population FROM admixture as ad JOIN sample_pop as sp ON ad.id = sp.Id WHERE sp.population IN ('SIB')")
 
     results = cursor.fetchall()     
 
@@ -145,7 +154,7 @@ def perform_admixture_analysis(selected_populations):
     # Implement clustering analysis logic here based on the selected populations
     # This function should return the clustering results
     # Example: clustering_results = clustering_algorithm(selected_populations)
-    admixture_results = "Admixture results for selected populations: {}".format(selected_populations)
+    admixture_results = "Admixture results for selected populations: {}".format(ad_selected_populations)
     
     return admixture_results, adplot_filepath
 

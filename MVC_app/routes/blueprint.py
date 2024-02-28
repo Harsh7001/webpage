@@ -7,7 +7,6 @@ blueprint.route('/', methods=['GET'])(index)
 blueprint.route('/create', methods=['GET'])(create)
 blueprint.route('/insert', methods=['GET'])(insert)
 
-#blueprint.route('/clustering_analysis', methods=['GET'])(Clustering_analysis)
 
 blueprint.route('/clustering_analysis', methods=['GET', 'POST'])(clustering_analysis)
 blueprint.route('/admixture_analysis', methods=['GET', 'POST'])(admixture_analysis)

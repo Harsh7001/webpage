@@ -35,11 +35,11 @@ def clustering_analysis():
     if request.method == 'POST':
         selected_populations = request.form.getlist('selected_populations')
         # Now you have the selected populations in the list 'selected_populations'
-        superpopulations = request.form.getlist('superpopulations')
+        
         # You can pass this list to your clustering function for further processing
         
         # Example:
-        clustering_results = perform_clustering_analysis(selected_populations or superpopulations)
+        clustering_results = perform_clustering_analysis(selected_populations)
         
         # You can then render a template with the clustering results, or do any other processing
         
@@ -49,13 +49,13 @@ def clustering_analysis():
     return render_template('clustering_analysis.html')
 def admixture_analysis():
     if request.method == 'POST':
-        selected_populations = request.form.getlist('selected_populations')
+        ad_selected_populations = request.form.getlist('ad_selected_populations')
         # Now you have the selected populations in the list 'selected_populations'
         
         # You can pass this list to your clustering function for further processing
         
         # Example:
-        admixture_results = perform_admixture_analysis(selected_populations)
+        admixture_results = perform_admixture_analysis(ad_selected_populations)
         
         # You can then render a template with the clustering results, or do any other processing
         

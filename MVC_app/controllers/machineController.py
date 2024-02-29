@@ -3,7 +3,7 @@ import sqlite3
 import matplotlib.pyplot as plt
 from flask import render_template, request
 # from models.machine import SamplePop,Populations,GeneticData,SNP,ClusteringAnalysis,Admixture, db
-from services.user_service import perform_clustering_analysis, perform_admixture_analysis, get_genotype_frequency
+from services.user_service import perform_clustering_analysis, perform_admixture_analysis, get_genotype_frequency, get_allele_frequency, get_clinical_relevance
 
 
 def index():
@@ -57,12 +57,23 @@ def analyze():
     selected_genomic_end = request.form.get('selected_genomic_end')
     populations = request.form.getlist('populations')
 
-    conn = sqlite3.connect('your_database.db')  # Provide your database name
-    data = get_genotype_frequency(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations, conn)
+    print("selected_SNPid: ", selected_SNPid)
+    print("populations: ", populations)
 
-    # Process data as needed
-    # Return processed data to results.html
-    return render_template('results.html', data=data)
+    data = get_genotype_frequency(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations)
+    data1 = get_allele_frequency(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations)
+    data2 = get_clinical_relevance(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations)
+    # data3 = g
+    # Join the three datasets
+    final_result = {
+        'genotype_frequency': data,
+        'allele_frequency': data1,
+        'clinical_relevance': data2
+    }
+    print("controller_results: ", final_result)
+    # Process the final result as needed
+    # Return the processed data to results.html
+    return render_template('results.html', final_result=final_result)
 
 def about():
     if request.method == 'POST':

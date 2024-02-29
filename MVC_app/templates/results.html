@@ -3,117 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genetic Information Results</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            text-align: center;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        table {
-            width: 80%;
-            margin: 0 auto;
-            border-collapse: collapse;
-            margin-top: 30px;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #ddd;
-        }
-
-        .matrix-container {
-            width: 80%;
-            margin: 0 auto;
-            margin-top: 30px;
-        }
-
-        .matrix {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .matrix img {
-            max-width: 100%;
-            height: auto;
-            margin: 10px;
-        }
-
-        .download-button {
-            margin-top: 30px;
-        }
-    </style>
+    <title>Analysis Results</title>
 </head>
 <body>
-    <h1>Genetic Information Results</h1>
+    <h1>Analysis Results</h1>
+    <p> {{ final_result }} </p>
+    <p>{{final_result.genotype_frequency}}</p>
 
-    <!-- Placeholder for displaying allele and genotype frequencies -->
-    <div id="frequencies">
-        
-        <!-- Frequency data will be displayed here -->
-        <h2>Allele and Genotype Frequencies</h2>
-        <table>
-            <tr>
-                <th>SNP ID</th>
-                <th>Allele Frequency</th>
-                <th>Genotype Frequency</th>
-            </tr>
-            {% for row in allele_genotype_results %}
-            <tr>
-                <td>{{ row['snp_id'] }}</td>
-                <td>{{ row['allele_frequency'] }}</td>
-                <td>{{ row['genotype_frequency'] }}</td>
-            </tr>
-            {% endfor %}
+    {% if final_result %}
+        <h2>Genotype Frequency</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>SNP ID</th>
+                    <th>Gene Name</th>
+                    <th>Genomic Position</th>
+                    <!-- Add more columns as needed -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in final_result.genotype_frequency.items() %}
+                    <tr>
+                        <td>{{ item.snp_id }}</td>
+                        <td>{{ item.genename }}</td>
+                        <td>{{ item.pos }}</td>
+                        <!-- Add more columns as needed -->
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
-    </div>
-    
-    </div>
+    {% endif %}
 
-    <div id="clinical_relevance">
-        <!-- Clinical relevance info will be displayed here -->
-        {% for relevance in clinical_relevance_info %}
-        <p>{{ relevance }}</p>
-        {% endfor %}
-    </div>
+    <!-- Repeat similar blocks for allele frequency and clinical relevance if needed -->
 
-    <!-- Placeholder for displaying pairwise matrix -->
-    <div class="matrix-container">
-        <h2>Pairwise Population Genetic Differentiation Matrix</h2>
-        <div class="matrix">
-            <!-- Pairwise matrix plot will be displayed here -->
-            <img src="{{ url_for('static', filename='pairwise_matrix.png') }}" alt="Pairwise Matrix">
-        </div>
-    </div>
-
-    <!-- Download button for results text file -->
-    <div class="download-button">
-        <a href="{{ url_for('blueprint.download_results') }}" download="results.txt">
-            <button>Download Results</button>
-        </a>
-    </div>
-    </body>
-    </html>
-
+</body>
+</html>

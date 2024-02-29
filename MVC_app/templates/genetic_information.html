@@ -1,105 +1,86 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retrieve SNP Information</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            text-align: center;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        form {
-            margin-top: 30px;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        input[type="text"] {
-            padding: 8px;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-
-        input[type="submit"] {
-            padding: 10px 20px;
-            font-size: 18px;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-    </style>
+    <title>Genotype Frequency Analysis</title>
 </head>
 <body>
-    <h1>Retrieve SNP Information</h1>
+    <h1>Genotype Frequency Analysis</h1>
 
-    <form method="post" action="/retrieve_snp_info">
-        <label for="selection_type">Select Search Criteria:</label><br>
-        <select id="selection_type" name="selection_type">
-            <option value="snp_id">SNP ID</option>
-            <option value="genomic_coordinates">Genomic Coordinates</option>
-            <option value="gene_names">Gene Names</option>
-        </select><br>
+    <form action="/analyze" method="post">
+        <label for="selected_SNPid">SNP ID:</label><br>
+        <input type="text" id="selected_SNPid" name="selected_SNPid"><br><br>
 
-        <div id="snp_id_input" style="display: none;">
-            <label for="snp_id">SNP ID:</label><br>
-            <input type="text" id="snp_id" name="snp_id"><br>
-        </div>
+        <label for="selected_gene">Gene Name:</label><br>
+        <input type="text" id="selected_gene" name="selected_gene"><br><br>
 
-        <div id="genomic_coordinates_input" style="display: none;">
-            <label for="chromosome">Chromosome:</label><br>
-            <input type="text" id="chromosome" name="chromosome"><br>
+        <label for="selected_genomic_start">Genomic Region - Start Position:</label><br>
+        <input type="text" id="selected_genomic_start" name="selected_genomic_start"><br><br>
 
-            <label for="start_position">Start Position:</label><br>
-            <input type="text" id="start_position" name="start_position"><br>
+        <label for="selected_genomic_end">Genomic Region - End Position:</label><br>
+        <input type="text" id="selected_genomic_end" name="selected_genomic_end"><br><br>
 
-            <label for="end_position">End Position:</label><br>
-            <input type="text" id="end_position" name="end_position"><br>
-        </div>
+        <label for="populations">Select Populations to Include:</label><br>
+        <label for="populations">Select Populations to include:</label><br>
+        <input type="checkbox" id="ACB" name="population" value="ACB">
+        <label for="ACB">ACB</label>
+        <input type="checkbox" id="ASW" name="population" value="ASW">
+        <label for="ASW">ASW</label>
+        <input type="checkbox" id="BEB" name="population" value="BEB">
+        <label for="BEB">BEB</label>
+        <input type="checkbox" id="CDX" name="population" value="CDX">
+        <label for="CDX">CDX</label>
+        <input type="checkbox" id="CHB" name="population" value="CHB">
+        <label for="CHB">CHB</label>
+        <input type="checkbox" id="CHS" name="population" value="CHS">
+        <label for="CHS">CHS</label>
+        <input type="checkbox" id="CLM" name="population" value="CLM">
+        <label for="CLM">CLM</label>
+        <input type="checkbox" id="ESN" name="population" value="ESN">
+        <label for="ESN">ESN</label>
+        <input type="checkbox" id="FIN" name="population" value="FIN">
+        <label for="FIN">FIN</label>
+        <input type="checkbox" id="GBR" name="population" value="GBR">
+        <label for="GBR">GBR</label>
+        <input type="checkbox" id="GIH" name="population" value="GIH">
+        <label for="GIH">GIH</label>
+        <input type="checkbox" id="GWD" name="population" value="GWD">
+        <label for="GWD">GWD</label>
+        <input type="checkbox" id="IBS" name="population" value="IBS">
+        <label for="IBS">IBS</label>
+        <input type="checkbox" id="ITU" name="population" value="ITU">
+        <label for="ITU">ITU</label>
+        <input type="checkbox" id="JPT" name="population" value="JPT">
+        <label for="JPT">JPT</label>
+        <input type="checkbox" id="KHV" name="population" value="KHV">
+        <label for="KHV">KHV</label>
+        <input type="checkbox" id="LWK" name="population" value="LWK">
+        <label for="LWK">LWK</label>
+        <input type="checkbox" id="MSL" name="population" value="MSL">
+        <label for="MSL">MSL</label>
+        <input type="checkbox" id="MXL" name="population" value="MXL">
+        <label for="MXL">MXL</label>
+        <input type="checkbox" id="PEL" name="population" value="PEL">
+        <label for="PEL">PEL</label>
+        <input type="checkbox" id="PJL" name="population" value="PJL">
+        <label for="PJL">PJL</label>
+        <input type="checkbox" id="PUR" name="population" value="PUR">
+        <label for="PUR">PUR</label>
+        <input type="checkbox" id="SIB" name="population" value="SIB">
+        <label for="SIB">SIB</label>
+        <input type="checkbox" id="STU" name="population" value="STU">
+        <label for="STU">STU</label>
+        <input type="checkbox" id="TSI" name="population" value="TSI">
+        <label for="TSI">TSI</label>
+        <input type="checkbox" id="YRI" name="population" value="YRI">  
+        <label for="YRI">YRI</label>
+        
+        <!-- Add checkboxes for other populations -->
+        <br><br>
 
-        <div id="gene_names_input" style="display: none;">
-            <label for="gene_names">Gene Names:</label><br>
-            <input type="text" id="gene_names" name="gene_names"><br>
-        </div>
-
-        <input type="submit" value="Retrieve Information">
+        <input type="submit" value="Analyze">
     </form>
-
-    <script>
-        // Show input fields based on selection type
-        document.getElementById("selection_type").addEventListener("change", function() {
-            var selectionType = this.value;
-            var snpIdInput = document.getElementById("snp_id_input");
-            var genomicCoordinatesInput = document.getElementById("genomic_coordinates_input");
-            var geneNamesInput = document.getElementById("gene_names_input");
-
-            if (selectionType === "snp_id") {
-                snpIdInput.style.display = "block";
-                genomicCoordinatesInput.style.display = "none";
-                geneNamesInput.style.display = "none";
-            } else if (selectionType === "genomic_coordinates") {
-                snpIdInput.style.display = "none";
-                genomicCoordinatesInput.style.display = "block";
-                geneNamesInput.style.display = "none";
-            } else if (selectionType === "gene_names") {
-                snpIdInput.style.display = "none";
-                genomicCoordinatesInput.style.display = "none";
-                geneNamesInput.style.display = "block";
-            }
-        });
-    </script>
 </body>
 </html>

@@ -71,12 +71,32 @@
 
     <!-- Placeholder for displaying allele and genotype frequencies -->
     <div id="frequencies">
+        
         <!-- Frequency data will be displayed here -->
+        <h2>Allele and Genotype Frequencies</h2>
+        <table>
+            <tr>
+                <th>SNP ID</th>
+                <th>Allele Frequency</th>
+                <th>Genotype Frequency</th>
+            </tr>
+            {% for row in allele_genotype_results %}
+            <tr>
+                <td>{{ row['snp_id'] }}</td>
+                <td>{{ row['allele_frequency'] }}</td>
+                <td>{{ row['genotype_frequency'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    
     </div>
 
-    <!-- Placeholder for displaying clinical relevance info -->
     <div id="clinical_relevance">
         <!-- Clinical relevance info will be displayed here -->
+        {% for relevance in clinical_relevance_info %}
+        <p>{{ relevance }}</p>
+        {% endfor %}
     </div>
 
     <!-- Placeholder for displaying pairwise matrix -->
@@ -94,5 +114,6 @@
             <button>Download Results</button>
         </a>
     </div>
-</body>
-</html>
+    </body>
+    </html>
+

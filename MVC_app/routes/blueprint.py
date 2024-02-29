@@ -3,10 +3,9 @@ from controllers.machineController import index, clustering_analysis,admixture_a
 
 blueprint = Blueprint('blueprint', __name__)
 
+#Adding blueprints which will route the request to the respective functions
+
 blueprint.route('/', methods=['GET'])(index)
-
-
-
 
 blueprint.route('/clustering_analysis', methods=['GET', 'POST'])(clustering_analysis)
 blueprint.route('/admixture_analysis', methods=['GET', 'POST'])(admixture_analysis)

@@ -9,9 +9,6 @@ app.config.from_object('config')
 db.init_app(app)
 migrate = Migrate(app, db)
 
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
 
 def create_app():
     app = Flask(__name__)  # flask app object

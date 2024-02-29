@@ -53,6 +53,7 @@
     </style>
 </head>
 <body>
+<div id="htmlContent">
     <h1>Search Results</h1>
 
     <h2>Genotype Frequency</h2>
@@ -135,8 +136,34 @@
     <h2>Pairwise Population Differentiation Matrix</h2>
     <img src="{{ url_for('static', filename='ppdm_plot.png') }}" alt="Pairwise FST Matrix">
     {% endif %}
+</div>
 <!-- Download button -->
-<button id="downloadBtn">Download Results</button>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+<script type="text/javascript">
+    var doc = new jsPDF();
+    var specialElementHandlers = {
+        '#editor': function (element, renderer) {
+            return true;
+        }
+    };
+     
+     
+    $('#generatePDF').click(function () {
+        doc.fromHTML($('#htmlContent').html(), 15, 15, {
+            'width': 700,
+            'elementHandlers': specialElementHandlers
+        });
+        doc.save('sample_file.pdf');
+    });
+    </script>
+    <div id="editor"></div>
+    <p>
+    <button id="generatePDF">generate PDF</button>
+    </p>
+    
+<!-- <button id="downloadBtn">Download Results</button>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -182,7 +209,7 @@
                     document.body.removeChild(a);
                 });
             });
-</script>
+</script> -->
 
 </body>
 </html>

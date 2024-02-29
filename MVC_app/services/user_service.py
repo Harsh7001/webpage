@@ -15,11 +15,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 
+######################################################################################################################################
+# Clustering analysis function
 
 def perform_clustering_analysis(selected_populations):
     # Connect to the database
     if 'EUR' in selected_populations or 'AMR' in selected_populations or 'SAS' in selected_populations or 'EAS' in selected_populations or 'AFR' in selected_populations :       
-    # Code for EUR population
         conn = sqlite3.connect('population_data.db')
         cursor = conn.cursor()
         # print("PRINTINGGGGGG---->",selected_populations)
@@ -83,14 +84,13 @@ def perform_clustering_analysis(selected_populations):
     # Clear the plot
     plt.clf()
 
-    # Implement clustering analysis logic here based on the selected populations
-    # This function should return the clustering results
-    # Example: clustering_results = clustering_algorithm(selected_populations)
     clustering_results = "Clustering results for selected populations: {}".format(selected_populations)
     
     return clustering_results, plot_filepath
 
-# Implement the admixture analysis function
+
+######################################################################################################################################
+# Admixture analysis function
 
 def perform_admixture_analysis(ad_selected_populations):
     print("Selected populations:", ad_selected_populations)
@@ -140,17 +140,14 @@ def perform_admixture_analysis(ad_selected_populations):
     # Clear the plot
     plt.clf()
 
-    # Implement clustering analysis logic here based on the selected populations
-    # This function should return the clustering results
-    # Example: clustering_results = clustering_algorithm(selected_populations)
     admixture_results = "Admixture results for selected populations: {}".format(ad_selected_populations)
     
     return admixture_results, adplot_filepath
 
 
 
-
-
+###########################################################################################################################################
+# Genetic information analysis function
 
 
 def get_genotype_frequency(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations):
@@ -228,6 +225,10 @@ def get_genotype_frequency(selected_SNPid, selected_gene, selected_genomic_start
     #         data[f'HET_{pop.lower()}'] = het_freq
     #         data[f'HOM_REF_{pop.lower()}'] = hom_ref_freq
 
+
+
+#############
+#############
 def get_allele_frequency(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations):
     """
     Retrieves allele frequencies for a selected population based on criteria such as SNP ID, gene name, or genomic coordinates.
@@ -284,6 +285,10 @@ def get_allele_frequency(selected_SNPid, selected_gene, selected_genomic_start, 
     data1 = cursor.fetchall()     
     return data1
 
+
+#############
+#############
+
 def get_clinical_relevance(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations):
     """
     Retrieves clinical relevance for a selected population based on criteria such as SNP ID, gene name, or genomic coordinates.
@@ -328,6 +333,9 @@ def get_clinical_relevance(selected_SNPid, selected_gene, selected_genomic_start
 
     data2 = cursor.fetchall()     
     return data2
+
+#############
+#############
 
 import sqlite3
 import matplotlib.pyplot as plt

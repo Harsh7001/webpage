@@ -4,6 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #0056b3;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #007bff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
     <h1>Search Results</h1>
@@ -88,5 +135,54 @@
     <h2>Pairwise Population Differentiation Matrix</h2>
     <img src="{{ url_for('static', filename='ppdm_plot.png') }}" alt="Pairwise FST Matrix">
     {% endif %}
+<!-- Download button -->
+<button id="downloadBtn">Download Results</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            // Construct the data string to be downloaded
+            var data = '';
+
+            // Add genotype data
+            data += 'Genotype Frequency\n';
+            data += 'Position,Gene Name,SNP ID,Reference,Alternate';
+                    for (var i = 0; i < genotype_data.length; i++) {
+                        data += '\n' + genotype_data[i].join(',');
+                    }
+                    data += '\n\n';
+
+                    // Add allele data
+                    data += 'Allele Frequency\n';
+                    data += 'Position,Gene Name,SNP ID,Reference,Alternate';
+                    for (var i = 0; i < allele_data.length; i++) {
+                        data += '\n' + allele_data[i].join(',');
+                    }
+                    data += '\n\n';
+
+                    // Add clinical data
+                    data += 'Clinical Relevance\n';
+                    data += 'Position,Gene Name,SNP ID,Reference,Alternate,Phenotype';
+                    for (var i = 0; i < clinical_data.length; i++) {
+                        data += '\n' + clinical_data[i].join(',');
+                    }
+                    data += '\n\n';
+
+                    // Create a Blob object to hold the data
+                    var blob = new Blob([data], { type: 'text/csv' });
+
+                    // Create a temporary anchor element to trigger the download
+                    var a = document.createElement('a');
+                    a.href = window.URL.createObjectURL(blob);
+                    a.download = 'search_results.csv';
+                    document.body.appendChild(a);
+                    a.click();
+
+                    // Cleanup
+                    document.body.removeChild(a);
+                });
+            });
+</script>
+
 </body>
 </html>

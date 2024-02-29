@@ -18,19 +18,19 @@ import os
 
 def perform_clustering_analysis(selected_populations):
     # Connect to the database
-    if 'EUR' in selected_populations or 'AMR' in selected_populations or 'SAS' in selected_populations or 'EAS' in selected_populations or 'AFR' in selected_populations or 'SIB' in selected_populations :       
+    if 'EUR' in selected_populations or 'AMR' in selected_populations or 'SAS' in selected_populations or 'EAS' in selected_populations or 'AFR' in selected_populations :       
     # Code for EUR population
         conn = sqlite3.connect('population_data.db')
         cursor = conn.cursor()
-        print("PRINTINGGGGGG---->",selected_populations)
-        print("INSIDE IF")
+        # print("PRINTINGGGGGG---->",selected_populations)
+        # print("INSIDE IF")
         sql_query = "SELECT pc.SampleID, pc.PCA_1, pc.PCA_2, sp.population FROM pca_table as pc JOIN sample_pop as sp ON pc.SampleId = sp.Id WHERE sp.population IN (SELECT population_code FROM populations WHERE superpopulation_code IN ({}))".format(','.join('?' for _ in selected_populations))
         cursor.execute(sql_query, selected_populations)
     else:
         conn = sqlite3.connect('population_data.db')
         cursor = conn.cursor()
-        print("PRINTINGGGGGG---->",selected_populations)
-        print("INSIDE ELSE")
+        # print("PRINTINGGGGGG---->",selected_populations)
+        # print("INSIDE ELSE")
         # Retrieve PCA results from the database
         sql_query= "SELECT pc.SampleID, pc.PCA_1, pc.PCA_2, sp.population FROM pca_table as pc JOIN sample_pop as sp ON pc.SampleId = sp.Id WHERE sp.population IN ({})".format(','.join('?' for _ in selected_populations))
         cursor.execute(sql_query, selected_populations)
@@ -38,13 +38,13 @@ def perform_clustering_analysis(selected_populations):
 
     # Close the database connection 
     conn.close()
-    print("RESULTS---->",results)
+    # print("RESULTS---->",results)
 
     pca_data = np.array(results)
     pca = PCA(n_components=2)
 
     pca_transformed = pca.fit_transform(pca_data[:, 1:3].astype(float))
-    print("PCA Transformed---->",pca_transformed)
+    # print("PCA Transformed---->",pca_transformed)
 
     # Create a list of unique populations
     unique_populations = list(set([result[3] for result in results]))
@@ -54,16 +54,6 @@ def perform_clustering_analysis(selected_populations):
 
     plt.figure(figsize=(8, 6))
 
-    # Iterate over the results and plot each population with a different color
-    for i, result in enumerate(results):
-        population = result[3]
-        color = color_map(unique_populations.index(population))
-        plt.scatter(pca_transformed[i, 0], pca_transformed[i, 1], c=color, alpha=0.5)
-
-    plt.xlabel('Principal Component 1')
-    plt.ylabel('Principal Component 2')
-    plt.title('PCA Plot')
-    plt.grid(True)
 
     # Iterate over the results and plot each population with a different color
     for i, result in enumerate(results):
@@ -104,18 +94,18 @@ def perform_clustering_analysis(selected_populations):
 
 def perform_admixture_analysis(ad_selected_populations):
     print("Selected populations:", ad_selected_populations)
-    if 'EUR' in ad_selected_populations or 'AMR' in ad_selected_populations or 'SAS' in ad_selected_populations or 'EAS' in ad_selected_populations or 'AFR' in ad_selected_populations or 'SIB' in ad_selected_populations :       
+    if 'EUR' in ad_selected_populations or 'AMR' in ad_selected_populations or 'SAS' in ad_selected_populations or 'EAS' in ad_selected_populations or 'AFR' in ad_selected_populations :       
         conn = sqlite3.connect('population_data.db')
         cursor = conn.cursor()
-        print("PRINTINGGGGGG---->",ad_selected_populations)
-        print("INSIDE IF")
+        # print("PRINTINGGGGGG---->",ad_selected_populations)
+        # print("INSIDE IF")
         sql_query = "SELECT ad.id, ad.P1, ad.P2, sp.population FROM admixture as ad JOIN sample_pop as sp ON ad.id = sp.Id WHERE sp.population IN (SELECT population_code FROM populations WHERE superpopulation_code IN ({}))".format(','.join('?' for _ in ad_selected_populations))
         cursor.execute(sql_query, ad_selected_populations)
     else:
         conn = sqlite3.connect('population_data.db')
         cursor = conn.cursor()
-        print("PRINTINGGGGGG---->",ad_selected_populations)
-        print("INSIDE ELSE")
+        # print("PRINTINGGGGGG---->",ad_selected_populations)
+        # print("INSIDE ELSE")
         # Retrieve PCA results from the database
         sql_query= "SELECT ad.id, ad.P1, ad.P2, sp.population FROM admixture as ad JOIN sample_pop as sp ON ad.id = sp.Id WHERE sp.population IN ({})".format(','.join('?' for _ in ad_selected_populations))
         cursor.execute(sql_query, ad_selected_populations)
@@ -339,23 +329,34 @@ def get_clinical_relevance(selected_SNPid, selected_gene, selected_genomic_start
     data2 = cursor.fetchall()     
     return data2
 
+import sqlite3
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
 def get_ppdm_data(populations):
     conn = sqlite3.connect('population_data.db')
     cursor = conn.cursor()
 
     if populations and len(populations) > 1:
         # Calculate pairwise population genetic differentiation
-        pairwise_matrix = None  # Implement your calculation logic here
-        population_columns = ", ".join([f"'{pop}'" for pop in populations])
+        population_columns = ", ".join([f"{pop}" for pop in populations])
+       # Modify the query to dynamically generate placeholders for multiple populations
+        placeholders = ", ".join(["?" for _ in range(len(populations))])
         ppdm_query = f"""
         SELECT {population_columns} FROM ppdm_data
-        WHERE population = ?
+        WHERE population IN ({placeholders})
         """
-        cursor.execute(ppdm_query, (populations,))
-        data3 = cursor.fetchall()
+        # Modify the cursor.execute() line to pass multiple parameters
+        cursor.execute(ppdm_query, populations)
 
+        data3 = cursor.fetchall()
+        print(data3)
+        # Convert data3 into a 2D array for heatmap plotting
+        data_array = np.array(data3)
+        print(data_array)   
         # Plot heatmap
-        heatmap = sns.heatmap(data3, annot=False, cmap='coolwarm', linewidths=0.5, linecolor='black')
+        heatmap = sns.heatmap(data_array, annot=False, cmap='coolwarm', linewidths=0.5, linecolor='black')
         plt.title('Pairwise FST Matrix (Log Transformed)', fontsize=16)
         plt.xlabel('Populations', fontsize=14)
         plt.ylabel('Populations', fontsize=14)
@@ -369,7 +370,11 @@ def get_ppdm_data(populations):
         output_path = '/Users/aditisahu/Documents/webpage/MVC_app/static/ppdm_plot.png'
         plt.savefig(output_path)
         
-        plt.show()
+        plt.close()  # Close the plot to prevent it from being displayed
+        
+        return data3, output_path  # Return data and output path
 
-        return data3, output_path
+    else:
+        return None, None  # Return None if there are less than 2 selected populations
+
 

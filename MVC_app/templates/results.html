@@ -3,38 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analysis Results</title>
+    <title>Search Results</title>
 </head>
 <body>
-    <h1>Analysis Results</h1>
-    <p> {{ final_result }} </p>
-    <p>{{final_result.genotype_frequency}}</p>
+    <h1>Search Results</h1>
 
-    {% if final_result %}
-        <h2>Genotype Frequency</h2>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>SNP ID</th>
-                    <th>Gene Name</th>
-                    <th>Genomic Position</th>
-                    <!-- Add more columns as needed -->
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in final_result.genotype_frequency.items() %}
-                    <tr>
-                        <td>{{ item.snp_id }}</td>
-                        <td>{{ item.genename }}</td>
-                        <td>{{ item.pos }}</td>
-                        <!-- Add more columns as needed -->
-                    </tr>
+    <h2>Genotype Frequency</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Position</th>
+                <th>Gene Name</th>
+                <th>SNP ID</th>
+                <th>Reference</th>
+                <th>Alternate</th>
+                {% for pop in populations %}
+                <th>{{ pop }} Hom Alt</th>
+                <th>{{ pop }} Het</th>
+                <th>{{ pop }} Hom Ref</th>
                 {% endfor %}
-            </tbody>
-        </table>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in genotype_data %}
+            <tr>
+                {% for item in row %}
+                <td>{{ item }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Allele Frequency</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Position</th>
+                <th>Gene Name</th>
+                <th>SNP ID</th>
+                <th>Reference</th>
+                <th>Alternate</th>
+                {% for pop in populations %}
+                <th>{{ pop }} Alternate</th>
+                <th>{{ pop }} Reference</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in allele_data %}
+            <tr>
+                {% for item in row %}
+                <td>{{ item }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Clinical Relevance</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Position</th>
+                <th>Gene Name</th>
+                <th>SNP ID</th>
+                <th>Reference</th>
+                <th>Alternate</th>
+                <th>Phenotype</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in clinical_data %}
+            <tr>
+                {% for item in row %}
+                <td>{{ item }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if ppdm_data %}
+    <h2>Pairwise Population Differentiation Matrix</h2>
+    <img src="{{ url_for('static', filename='ppdm_plot.png') }}" alt="Pairwise FST Matrix">
     {% endif %}
-
-    <!-- Repeat similar blocks for allele frequency and clinical relevance if needed -->
-
 </body>
 </html>

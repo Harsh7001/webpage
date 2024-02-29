@@ -185,7 +185,6 @@ def get_genotype_frequency(selected_SNPid, selected_gene, selected_genomic_start
         join genotype_freqs as gf on vt.pos = gf.pos
         where snp_Id = ?
         """
-        # data= pd.read_sql_query(genotype_query, connection, params=value)
         cursor.execute(genotype_query, (selected_SNPid,))
 
 
@@ -258,7 +257,8 @@ def get_allele_frequency(selected_SNPid, selected_gene, selected_genomic_start, 
         join allele_freqs as af on vt.pos = af.pos
         where snp_Id  =  ?
         """
-        parameters1 = (selected_SNPid)
+        cursor.execute(allele_query, (selected_SNPid,))
+
 
     elif len(populations)>0 and len(selected_gene)>0:
         # Assuming the column names follow the pattern: population_hom_ref, population_hom_alt and population_het
@@ -271,7 +271,8 @@ def get_allele_frequency(selected_SNPid, selected_gene, selected_genomic_start, 
         join allele_freqs as af on vt.pos = af.pos
         WHERE geneName = ?
         """
-        parameters1 = (selected_gene)
+        cursor.execute(allele_query, (selected_gene,))
+
 
     elif len(populations)>0 and len(selected_genomic_start) and len(selected_genomic_end)>0:
         # Assuming the column names follow the pattern: population_hom_ref, population_hom_alt and population_het
@@ -285,11 +286,11 @@ def get_allele_frequency(selected_SNPid, selected_gene, selected_genomic_start, 
         WHERE vt.pos BETWEEN ? AND ?
         """
         parameters1 = (selected_genomic_start, selected_genomic_end)
+        cursor.execute(allele_query, parameters1)
 
     else: 
         print('Allele frequency not provided')
 
-    cursor.execute(allele_query, parameters1)
     data1 = cursor.fetchall()     
     return data1
 
@@ -302,9 +303,6 @@ def get_clinical_relevance(selected_SNPid, selected_gene, selected_genomic_start
     conn = sqlite3.connect('population_data.db')
     cursor = conn.cursor()
     if len(populations) > 0 and (":" in selected_SNPid or ";" in selected_SNPid or selected_SNPid.startswith("rs")):
-        # Assuming the column names follow the pattern: population_hom_ref, population_hom_alt and population_het
-        population_columns = [f"HOM_ALT_{pop}, HETRO_{pop}, HOM_REF_{pop}" for pop in populations]
-        selected_columns = ", ".join(population_columns)
         
         clinical_query= f"""
         select vt.pos, vt.geneName, vt.snp_Id, vt.ref, vt.alt,ct.phenotype
@@ -312,13 +310,9 @@ def get_clinical_relevance(selected_SNPid, selected_gene, selected_genomic_start
         join clinical_table as ct on vt.pos = ct.chromStart AND ct.chromEnd
         where snp_id = ?
         """
-        
-        parameters2 = (selected_SNPid)
+        cursor.execute(clinical_query, (selected_SNPid,))
 
     elif len(populations)>0 and len(selected_gene)>0:
-        # Assuming the column names follow the pattern: population_hom_ref, population_hom_alt and population_het
-        population_columns = [f"HOM_ALT_{pop}, HETRO_{pop}, HOM_REF_{pop}" for pop in populations]
-        selected_columns = ", ".join(population_columns)
         
         clinical_query= f"""
         select vt.pos, vt.geneName, vt.snp_Id, vt.ref, vt.alt,ct.phenotype
@@ -326,12 +320,9 @@ def get_clinical_relevance(selected_SNPid, selected_gene, selected_genomic_start
         join clinical_table as ct on vt.pos = ct.chromStart AND ct.chromEnd
         where vt.geneName = ?
         """
-        parameters2 = (selected_gene)
+        cursor.execute(clinical_query, (selected_gene,))
 
     elif len(populations)>0 and len(selected_genomic_start) and len(selected_genomic_end)>0:
-        # Assuming the column names follow the pattern: population_hom_ref, population_hom_alt and population_het
-        population_columns = [f"HOM_ALT_{pop}, HETRO_{pop}, HOM_REF_{pop}" for pop in populations]
-        selected_columns = ", ".join(population_columns)
 
         clinical_query= f"""
         select vt.pos, vt.geneName, vt.snp_Id, vt.ref, vt.alt,ct.phenotype
@@ -340,11 +331,11 @@ def get_clinical_relevance(selected_SNPid, selected_gene, selected_genomic_start
         where vt.pos BETWEEN ? AND ?
         """
         parameters2 = (selected_genomic_start, selected_genomic_end)
+        cursor.execute(clinical_query, parameters2)
 
     else: 
         print('Allele frequency not provided')
 
-    cursor.execute(clinical_query, parameters2)
     data2 = cursor.fetchall()     
     return data2
 
@@ -360,8 +351,7 @@ def get_ppdm_data(populations):
         SELECT {population_columns} FROM ppdm_data
         WHERE population = ?
         """
-        parameters = (populations,)
-        cursor.execute(ppdm_query, parameters)
+        cursor.execute(ppdm_query, (populations,))
         data3 = cursor.fetchall()
 
         # Plot heatmap
@@ -381,5 +371,5 @@ def get_ppdm_data(populations):
         
         plt.show()
 
-        return data3
+        return data3, output_path
 

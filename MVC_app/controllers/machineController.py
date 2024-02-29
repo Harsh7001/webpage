@@ -3,7 +3,7 @@ import sqlite3
 import matplotlib.pyplot as plt
 from flask import render_template, request
 # from models.machine import SamplePop,Populations,GeneticData,SNP,ClusteringAnalysis,Admixture, db
-from services.user_service import perform_clustering_analysis, perform_admixture_analysis, get_genotype_frequency, get_allele_frequency, get_clinical_relevance
+from services.user_service import perform_clustering_analysis, perform_admixture_analysis, get_genotype_frequency, get_allele_frequency, get_clinical_relevance, get_ppdm_data
 
 
 def index():
@@ -60,20 +60,21 @@ def analyze():
     print("selected_SNPid: ", selected_SNPid)
     print("populations: ", populations)
 
-    data = get_genotype_frequency(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations)
-    data1 = get_allele_frequency(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations)
-    data2 = get_clinical_relevance(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations)
-    # data3 = g
+    genotype_data = get_genotype_frequency(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations)
+    allele_data = get_allele_frequency(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations)
+    clinical_data = get_clinical_relevance(selected_SNPid, selected_gene, selected_genomic_start, selected_genomic_end, populations)
+    ppdm_data = get_ppdm_data(populations)
     # Join the three datasets
     final_result = {
-        'genotype_frequency': data,
-        'allele_frequency': data1,
-        'clinical_relevance': data2
+        'genotype_frequency': genotype_data,
+        'allele_frequency': allele_data,
+        'clinical_relevance': clinical_data,
+        'pairwise_population_data': ppdm_data
     }
     print("controller_results: ", final_result)
     # Process the final result as needed
     # Return the processed data to results.html
-    return render_template('results.html', final_result=final_result)
+    return render_template('results.html', genotype_data=genotype_data, allele_data=allele_data, clinical_data=clinical_data, ppdm_data=ppdm_data)
 
 def about():
     if request.method == 'POST':
